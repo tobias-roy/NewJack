@@ -1,5 +1,6 @@
 <script>
 	import blackjack from '$lib/images/blackjackfront.png';
+	import { fade } from 'svelte/transition';
 	import Gamestart from './Gamestart.svelte';
 </script>
 
@@ -9,8 +10,8 @@
 </svelte:head>
 
 <section>
-	<div class="front-image">
-		<img src={blackjack} alt="Welcome" />
+	<div in:fade class="front-image">
+		<img src={blackjack} alt="Welcome"/>
 	</div>
 	<Gamestart />
 </section>
