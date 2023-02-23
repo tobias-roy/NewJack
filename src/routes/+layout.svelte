@@ -11,7 +11,7 @@
 	</main>
 
 	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
+		<a href="https://ludomani.dk/">Få hjælp til at stoppe</a>
 	</footer>
 </div>
 
@@ -43,6 +43,7 @@
 
 	footer a {
 		font-weight: bold;
+		margin-bottom: 10px;
 	}
 
 	@media (min-width: 480px) {

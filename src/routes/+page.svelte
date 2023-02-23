@@ -1,7 +1,6 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcome_fallback from '$lib/images/svelte-welcome.png';
+	import blackjack from '$lib/images/blackjackfront.png';
+	import Gamestart from './Gamestart.svelte';
 </script>
 
 <svelte:head>
@@ -10,22 +9,10 @@
 </svelte:head>
 
 <section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcome_fallback} alt="Welcome" />
-			</picture>
-		</span>
-
-		to your new<br />SvelteKit app
-	</h1>
-
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
+	<div class="front-image">
+		<img src={blackjack} alt="Welcome" />
+	</div>
+	<Gamestart />
 </section>
 
 <style>
@@ -37,23 +24,9 @@
 		flex: 0.6;
 	}
 
-	h1 {
-		width: 100%;
+	.front-image img{
+		height: 400px;
+		width: 400px;
 	}
 
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
 </style>
