@@ -4,19 +4,17 @@
 </svelte:head>
 
 <script>
+  import Nameinput from "../../components/Nameinput.svelte";
+  import NewJackGame from "../../components/NewJack.svelte";
   import { name } from "../../stores";
-  import Card from "../Card.svelte";
-  import Nameinput from "../Nameinput.svelte";
-  import NewJackGame from "../NewJack.svelte";
 
 </script>
 
 <div>
-	<Card card="spade2"/>
 	{#if $name == null}
-		<Nameinput />
-		{:else}
-		<NewJackGame />
+	<Nameinput />
+	{:else}
+	<NewJackGame />
 	{/if}
 </div>
 

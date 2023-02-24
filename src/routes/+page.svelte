@@ -1,7 +1,7 @@
 <script>
 	import blackjack from '$lib/images/blackjackfront.png';
 	import { fade } from 'svelte/transition';
-	import Gamestart from './Gamestart.svelte';
+	import Gamestart from '../components/Gamestart.svelte';
 </script>
 
 <svelte:head>

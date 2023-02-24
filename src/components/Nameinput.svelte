@@ -13,7 +13,6 @@
 	<button on:click={saveName}>Save name</button>
 </div>
 
-
 <style>
 	
 </style>

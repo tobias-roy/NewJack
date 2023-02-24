@@ -1,4 +1,5 @@
 <script>
+  import { fade } from 'svelte/transition';
   export let card;
   //Club Cards
   import club10 from '$lib/svg/cards/clubs/10.svg';
@@ -56,7 +57,6 @@
   import spadeJack from '$lib/svg/cards/spades/jack.svg';
   import spadeKing from '$lib/svg/cards/spades/king.svg';
   import spadeQueen from '$lib/svg/cards/spades/queen.svg';
-  import { name } from '../stores';
 
   const allCards = {
     club2: club2,
@@ -114,8 +114,10 @@
   };
 </script>
 
-<div>
+<div transition:fade>
+  {#if card != null}
   <img class="size" src="{allCards[card]}" alt="">
+  {/if}
 </div>
 
 <style>
