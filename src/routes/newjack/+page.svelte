@@ -5,12 +5,14 @@
 
 <script>
   import { name } from "../../stores";
-  import NewJackGame from "../Card.svelte";
+  import Card from "../Card.svelte";
   import Nameinput from "../Nameinput.svelte";
+  import NewJackGame from "../NewJack.svelte";
 
 </script>
 
 <div>
+	<Card card="spade2"/>
 	{#if $name == null}
 		<Nameinput />
 		{:else}
