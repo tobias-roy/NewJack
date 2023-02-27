@@ -41,6 +41,8 @@
   let revealHand = false;
   let lost = false;
   let won = false;
+  let draw = false;
+  let playerBlackJack = false;
   $shuffleCards = false;
 
   function createDeck() {
@@ -61,13 +63,13 @@
   }
 
   function startGame() {
-    if(startedGame){
+    if (startedGame) {
       reset();
     }
     if (betValue < $userPoints) {
       $userPoints -= betValue;
       startedGame = true;
-      if(deck.length < 50){
+      if (deck.length < 50) {
         deck = [];
         createDeck();
       }
@@ -85,6 +87,8 @@
     revealHand = false;
     lost = false;
     won = false;
+    draw = false;
+    playerBlackJack = false;
   }
 
   function pickRandomCard() {
@@ -99,12 +103,21 @@
     return pickedCard;
   }
 
+  function valueOfHandAce11(handArray) {
+    let value = 0;
+    handArray.forEach((card) => {
+      let cardValue = card.replace(/[^0-9]+/, "");
+      value += Number(cardValue);
+    });
+    return value;
+  }
+
   function handValue(handArray) {
     let value = 0;
     handArray.forEach((card) => {
       let cardValue = card.replace(/[^0-9]+/, "");
       if (cardValue == 11) {
-        if (value + cardValue > 21) {
+        if (valueOfHandAce11(handArray) > 21) {
           cardValue = 1;
         }
       }
@@ -132,6 +145,9 @@
     if (playerHandValue > 21) {
       lost = true;
       setScores();
+    } else if (playerHandValue == 21) {
+      playerBlackJack = true;
+      startHouseActions();
     }
   }
 
@@ -151,10 +167,11 @@
   }
 
   async function doHouseAI() {
-    let shouldHaveMinimum17 = houseHandValue <= 17;
-    let shouldMatchPlayer = playerHandValue > houseHandValue;
-    let over21 = houseHandValue > 21;
-    if (shouldHaveMinimum17 || shouldMatchPlayer || over21) {
+    let shouldHaveMinimum17 = houseHandValue < 17;
+    console.log("first", shouldHaveMinimum17);
+    if(houseHandValue > playerHandValue && houseHandValue < 22){
+      lost = true;
+    } else if (shouldHaveMinimum17) {
       houseHand.push(pickRandomCard());
       houseHand = houseHand;
       houseHandValue = handValue(houseHand);
@@ -164,6 +181,38 @@
           resolve();
         }, 200);
       });
+    } else {
+      checkResult();
+    }
+  }
+
+  function checkResult() {
+    let sameHand = playerHandValue == houseHandValue; //Draw
+    let is17 = houseHandValue == 17; //Compare hands and stop house counting
+    let blackjack = houseHandValue == 21; //Compare hands and stop house counting
+    let over21 = houseHandValue > 21; //House looses
+    function houseOverPlayer() {
+      if (houseHandValue > playerHandValue) {
+        lost = true;
+      } else {
+        won = true;
+      }
+    }
+    function playerOverHouse() {
+      if (playerHandValue > houseHandValue) {
+        won = true;
+      } else {
+        lost = true;
+      }
+    }
+
+    if (sameHand) {
+      draw = true;
+    } else if (is17 || blackjack) {
+      houseOverPlayer();
+      playerOverHouse();
+    } else if (over21) {
+      won = true;
     }
   }
 
@@ -203,8 +252,15 @@
 
   <!-- Show menu if you lost the hand -->
   {#if lost}
-    <div>
+    <div class="lostScreen">
       <h1>YOU LOST MOFUCKA</h1>
+      <button on:click={startGame}>Click me bithc</button>
+    </div>
+  {/if}
+
+  {#if won}
+    <div class="lostScreen">
+      <h1>YOU WON MOFUCKAAAAAAA</h1>
       <button on:click={startGame}>Click me bithc</button>
     </div>
   {/if}
@@ -218,6 +274,7 @@
       {#each houseHand as card}
         <Card {card} />
       {/each}
+      <div class="houseHandValue">House hand: {houseHandValue}</div>
     {/if}
   </div>
 
@@ -258,6 +315,11 @@
     .btnAction {
       margin-left: 20px;
     }
+
+    .houseHandValue {
+      position: absolute;
+      bottom: -25%;
+    }
     .actionButtons {
       display: flex;
       position: absolute;
@@ -268,7 +330,7 @@
       display: flex;
       position: absolute;
       left: 44%;
-      bottom: 60%;
+      bottom: 75%;
     }
 
     .playerHandCards {
@@ -307,7 +369,19 @@
     .shuffleAnimation {
       position: absolute;
       left: calc(50% - 40px);
-      bottom: calc(50% - 50px);
+      bottom: 50%;
+    }
+
+    .lostScreen {
+      z-index: 1;
+      width: 500px;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      background-color: rgba(255, 255, 255, 0.828);
+      position: absolute;
+      left: calc(50% - 250px);
+      bottom: calc(50% - 150px);
     }
   }
 </style>
