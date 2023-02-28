@@ -1,9 +1,12 @@
 <script>
+	import { goto } from '$app/navigation';
+	import { dealCard, name } from "../stores";
 	import Header from './Header.svelte';
 	import './styles.css';
+
 </script>
 
-<div class="app">
+<div class="app">	
 	<Header />
 
 	<main>
@@ -11,7 +14,9 @@
 	</main>
 
 	<footer>
-		<a href="https://ludomani.dk/">Få hjælp til at stoppe</a>
+		<div class="vertical-align">
+			<a href="https://ludomani.dk/">Få hjælp til at stoppe</a>
+		</div>
 	</footer>
 </div>
 
@@ -20,6 +25,13 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 100vh;
+	}
+
+	.vertical-align{
+		margin: -5px;
+  	top: 50%;
+  	-ms-transform: translateY(-50%);
+  	transform: translateY(-50%);
 	}
 
 	main {
@@ -35,10 +47,14 @@
 
 	footer {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 		justify-content: center;
 		align-items: center;
 		padding: 12px;
+	}
+
+	footer > div > button{
+		margin-left: 50px;
 	}
 
 	footer a {
