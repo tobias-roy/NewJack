@@ -1,5 +1,5 @@
 <script>
-  import { fade, fly } from "svelte/transition";
+  import { fly } from "svelte/transition";
   export let card;
   export let direction;
 </script>

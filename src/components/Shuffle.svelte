@@ -44,7 +44,7 @@
         $shuffleCards = false;
         $dealCard = true;
       }
-    }, 50);
+    }, 5);
   }
   $: $shuffleCards, createDeck(), shuffleCardsFunc();
 </script>

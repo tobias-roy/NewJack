@@ -1,11 +1,11 @@
-import { browser } from "$app/environment";
 import { writable } from "svelte/store";
 
 export const shuffleCards = writable();
 export const dealCard = writable(false);
+export const startedGame = writable(false);
 
 export const name = writable("Guest");
-export const userPoints = writable(500);
+export const userPoints = writable(2000);
 export const housePoints = writable(10000);
 
 if (typeof localStorage !== "undefined") {

@@ -6,10 +6,10 @@
     dealCard,
     housePoints,
     name,
-    shuffleCards,
-    userPoints
+    shuffleCards, startedGame, userPoints
   } from "../stores";
   import Card from "./Card.svelte";
+  import HandEndScreen from "./HandEndScreen.svelte";
   import Shuffle from "./Shuffle.svelte";
 
   const cardType = ["club", "diamond", "heart", "spade"];
@@ -34,10 +34,10 @@
   let playerHand = [];
   let playerHandValue = 0;
   let createdDeck = false;
-  let startedGame = false;
   let betValue = 0;
   let stand = false;
   let revealHand = false;
+  let gameEndStatus = '';
   let lost = false;
   let won = false;
   let draw = false;
@@ -62,10 +62,10 @@
   }
 
   function startGame() {
-    if (startedGame) {
-      reset();
+    if ($startedGame) {
+      resetGame();
     }
-    startedGame = true;
+    $startedGame = true;
     if (deck.length < 50) {
       deck = [];
       createDeck();
@@ -73,7 +73,9 @@
     initialDeal();
   }
 
-  function reset() {
+  export function resetGame() {
+    console.log('triggered')
+    deck = [];
     houseHand = [];
     houseHandValue = 0;
     playerHand = [];
@@ -81,9 +83,13 @@
     stand = false;
     revealHand = false;
     lost = false;
+    gameEndStatus = '';
     won = false;
     draw = false;
     playerBlackJack = false;
+    $shuffleCards = false;
+    $dealCard = false;
+    $startedGame = false;
   }
 
   function pickRandomCard() {
@@ -139,6 +145,7 @@
     playerHandValue = handValue(playerHand);
     if (playerHandValue > 21) {
       lost = true;
+      gameEndStatus = 'lost';
       setScores();
     } else if (playerHandValue == 21) {
       playerBlackJack = true;
@@ -168,6 +175,7 @@
     console.log("first", shouldHaveMinimum17);
     if (houseHandValue > playerHandValue && houseHandValue < 22) {
       lost = true;
+      gameEndStatus = 'lost';
     } else if (shouldHaveMinimum17) {
       houseHand.push(pickRandomCard());
       houseHand = houseHand;
@@ -201,25 +209,37 @@
     function houseOverPlayer() {
       if (houseHandValue > playerHandValue) {
         lost = true;
+      gameEndStatus = 'lost';
+
       } else {
         won = true;
+      gameEndStatus = 'won';
+
       }
     }
     function playerOverHouse() {
       if (playerHandValue > houseHandValue) {
         won = true;
+      gameEndStatus = 'won';
+
       } else {
         lost = true;
+      gameEndStatus = 'lost';
+
       }
     }
 
     if (sameHand) {
       draw = true;
+      gameEndStatus = 'draw';
+
     } else if (is17 || blackjack) {
       houseOverPlayer();
       playerOverHouse();
     } else if (over21) {
       won = true;
+      gameEndStatus = 'won';
+
     }
   }
 
@@ -252,59 +272,27 @@
 
 <!-- Game table -->
 <div class="tableBackground">
-  <div style="text-align: right">
+  <div class="cardsInDeck">
     <h3>Cards: {deck.length}</h3>
   </div>
-  <p>House points: {$housePoints}</p>
+  <div class="housePoints">
+    <h3>House balance: {$housePoints}</h3>
+  </div>
 
   <!-- Bet menu -->
-  {#if !startedGame}
-    <button class="btnStartGame" on:click={startGame}>Deal cards</button>
-    <input
-      bind:value={betValue}
-      type="number"
-      class="inputStartGame"
-      placeholder="Place bet"
-    />
+  {#if !$startedGame}
+    <button class="btnStartGame retroFormat blue" on:click={startGame}
+      >Deal cards</button
+    >
+    <button class="btnClearBet retroFormat red" on:click={() => {betValue = 0}}
+      >Clear bet</button
+    >
   {/if}
 
   <!-- Show menu if you lost the hand -->
-  {#if lost}
+  {#if lost || won || draw}
     <div class="lostScreen">
-      <h1>House wins!</h1>
-      <input
-        bind:value={betValue}
-        type="number"
-        class="inputStartGame"
-        placeholder="Place bet"
-      />
-      <button on:click={startGame}>Continue</button>
-    </div>
-  {/if}
-
-  {#if won}
-    <div class="lostScreen">
-      <h1>{$name} wins!</h1>
-      <input
-        bind:value={betValue}
-        type="number"
-        class="inputStartGame"
-        placeholder="Place bet"
-      />
-      <button on:click={startGame}>Continue</button>
-    </div>
-  {/if}
-
-  {#if draw}
-    <div class="lostScreen">
-      <h1>Push!</h1>
-      <input
-        bind:value={betValue}
-        type="number"
-        class="inputStartGame"
-        placeholder="Place bet"
-      />
-      <button on:click={startGame}>Continue</button>
+      <HandEndScreen gameStatus={gameEndStatus} on:startNewHand={resetGame}/>
     </div>
   {/if}
 
@@ -338,7 +326,7 @@
   </div>
 
   <!-- Display buttons for player actions -->
-  {#if $dealCard == true}
+  {#if $dealCard == true && $startedGame && !lost && !won && !draw}
     <div class="actionButtons">
       {#if !stand}
         <button class="btnAction" on:click={hitAction}>Hit</button>
@@ -347,11 +335,11 @@
     </div>
   {/if}
 
-  {#if !startedGame}
+  {#if !$startedGame}
     <div class="displayBetValue">Bet value: {betValue}</div>
   {/if}
 
-  {#if !startedGame}
+  {#if !$startedGame}
     <div class="chipContainer">
       <button
         class="pokerChip"
@@ -394,6 +382,39 @@
 
 <style>
   @media only screen and (min-width: 1360px) {
+    .retroFormat.blue {
+      background: #0000bc;
+    }
+    .retroFormat.blue:focus,
+    .retroFormat.blue:hover {
+      background: #0000fc;
+    }
+
+    .retroFormat.red {
+      background: #881400;
+    }
+    .retroFormat.red:focus,
+    .retroFormat.red:hover {
+      background: #a81000;
+    }
+
+    .retroFormat {
+      margin-top: 20px;
+      background: #7c7c7c;
+      border-bottom: 6px inset rgba(0, 0, 0, 0.5);
+      border-left: 6px inset rgba(0, 0, 0, 0.5);
+      border-right: 6px inset rgba(255, 255, 255, 0.5);
+      border-top: 6px inset rgba(255, 255, 255, 0.5);
+      box-sizing: border-box;
+      color: white;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 1.2rem;
+      min-width: 100px;
+      padding: 0.3rem;
+      text-transform: uppercase;
+      width: auto;
+    }
     .pokerChip {
       background-image: url(../lib/svg/pokerchip.svg);
       background-repeat: no-repeat;
@@ -461,14 +482,15 @@
     }
 
     .btnStartGame {
+      z-index: 1;
       position: absolute;
-      left: calc(50% - 42px);
+      left: calc(50% - 120px);
       bottom: calc(50% - 9px);
     }
-    .inputStartGame {
+    .btnClearBet {
       position: absolute;
-      left: calc(50% - 42px);
-      bottom: calc(50% - 35px);
+      right: 35%;
+      bottom: calc(50% - 9px);
     }
 
     .userInfo {
@@ -482,6 +504,7 @@
       position: absolute;
       left: calc(50% - 40px);
       bottom: 50%;
+      z-index: 0;
     }
 
     .lostScreen {
@@ -493,6 +516,22 @@
       position: absolute;
       left: calc(50% - 250px);
       bottom: calc(50% - 60px);
+    }
+
+    .cardsInDeck {
+      position: absolute;
+      right: 5%;
+      top: 5%;
+      color: white;
+      font-size: 25px;
+    }
+
+    .housePoints {
+      position: absolute;
+      left: 5%;
+      top: 5%;
+      color: white;
+      font-size: 25px;
     }
   }
 </style>

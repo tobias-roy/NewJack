@@ -1,16 +1,37 @@
 <script>
-  import { name } from "../stores";
-  let inputName;
-  function saveName() {
-    $name = inputName;
+  import { createEventDispatcher } from "svelte";
+  import { name, startedGame } from "../stores";
+
+  const dispatch = createEventDispatcher();
+  function startNewHand(){
+    $startedGame = false;
+    dispatch('startNewHand')
   }
+
+
+  export let gameStatus;
 </script>
 
-<div class="corner">
+<div class="endScreen">
   <div class="nameInputContainer">
-    <p>Enter playername:</p>
-    <input type="text" bind:value={inputName} />
-    <button on:click={saveName}>Save name</button>
+    {#if gameStatus == 'lost'}
+    <div class="lostScreen">
+      <h1>House wins!</h1>
+    </div>
+  {/if}
+
+  {#if gameStatus == 'won'}
+    <div class="lostScreen">
+      <h1 style="color: green;">{$name} wins!</h1>
+    </div>
+  {/if}
+
+  {#if gameStatus == 'draw'}
+    <div class="lostScreen">
+      <h1>Push!</h1>
+    </div>
+  {/if}
+    <button on:click={startNewHand}>Play again!</button>
   </div>
 </div>
 
@@ -24,12 +45,7 @@
     margin-top: 20vh;
   }
 
-  .nameInputContainer > p {
-    margin-right: 5px;
-  }
-
   .nameInputContainer > button {
-    margin-top: 20px;
     background: #7c7c7c;
     border-bottom: 6px inset rgba(0, 0, 0, 0.5);
     border-left: 6px inset rgba(0, 0, 0, 0.5);
@@ -49,5 +65,11 @@
   .nameInputContainer > button:focus,
   .nameInputContainer > button:hover {
     background: #bcbcbc;
+  }
+
+  .endScreen{
+    position: absolute;
+    left: calc(50% - 110px);
+    top: -100%;
   }
 </style>
