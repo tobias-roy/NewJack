@@ -1,15 +1,18 @@
 <script>
   import Nameinput from "../../components/Nameinput.svelte";
   import NewJackGame from "../../components/NewJack.svelte";
-  import { housePoints, name, userPoints } from "../../stores";
+  import { housePoints, name, shuffleCards, startedGame, userPoints } from "../../stores";
   let restart = {};
+  let newJackComponent;
 
-  function resetEntireGame() {
+  function resetApp() {
     $name = "Guest";
     $userPoints = 2000;
-    $housePoints = 10000;
+    $housePoints = 5000;
+    $shuffleCards = false;
+    $startedGame = false;
     restart = {};
-    NewJackGame.resetGame;
+    newJackComponent.resetApplication();
   }
 </script>
 
@@ -23,21 +26,23 @@
     {#if $name == "Guest"}
       <Nameinput />
     {:else}
-      <NewJackGame />
+      <NewJackGame bind:this={newJackComponent} />
     {/if}
   {/key}
   {#if $name != "Guest"}
-    <button class="resetButton retroButton" on:click={resetEntireGame}>Reset game</button>
+    <button class="resetButton retroButton" on:click={resetApp}
+      >Reset game</button
+    >
   {/if}
 </div>
 
 <style>
-  .resetButton{
+  .resetButton {
     position: absolute;
-    left: calc(50% - 50px)
+    left: calc(50% - 50px);
   }
 
-  .retroButton{
+  .retroButton {
     margin-top: 10px;
     background: #7c7c7c;
     border-bottom: 6px inset rgba(0, 0, 0, 0.5);
@@ -54,5 +59,4 @@
     text-transform: uppercase;
     width: auto;
   }
-
 </style>

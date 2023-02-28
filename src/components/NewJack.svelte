@@ -1,12 +1,10 @@
 <script>
-  import rear from "$lib/svg/cards/rear.svg";
-  import { bubble } from "svelte/internal";
-  import gametable from "../lib/images/table.png";
   import {
     dealCard,
     housePoints,
-    name,
-    shuffleCards, startedGame, userPoints
+    shuffleCards,
+    startedGame,
+    userPoints
   } from "../stores";
   import Card from "./Card.svelte";
   import HandEndScreen from "./HandEndScreen.svelte";
@@ -37,44 +35,44 @@
   let betValue = 0;
   let stand = false;
   let revealHand = false;
-  let gameEndStatus = '';
+  let gameEndStatus = "";
   let lost = false;
   let won = false;
   let draw = false;
   let playerBlackJack = false;
   $shuffleCards = false;
 
+  //Creates a deck consisting of 108 cards.
   function createDeck() {
-    for (let index = 0; index < 2; index++) {
-      cardType.forEach((type) => {
-        cardValue.forEach((value) => {
-          let card = {
-            type: type,
-            value: value,
-          };
-          deck.push(card);
-          deck = deck;
+    if(deck.length < 50){
+      for (let index = 0; index < 2; index++) {
+        cardType.forEach((type) => {
+          cardValue.forEach((value) => {
+            let card = {
+              type: type,
+              value: value,
+            };
+            deck.push(card);
+            deck = deck;
+          });
         });
-      });
+      }
+      $shuffleCards = true;
     }
     createdDeck = true;
-    $shuffleCards = true;
   }
 
   function startGame() {
-    if ($startedGame) {
-      resetGame();
-    }
     $startedGame = true;
     if (deck.length < 50) {
       deck = [];
       createDeck();
     }
-    initialDeal();
+    dealCards();
   }
 
-  export function resetGame() {
-    console.log('triggered')
+  //Resets the entire game.
+  export function resetApplication() {
     deck = [];
     houseHand = [];
     houseHandValue = 0;
@@ -83,15 +81,30 @@
     stand = false;
     revealHand = false;
     lost = false;
-    gameEndStatus = '';
+    gameEndStatus = "";
     won = false;
     draw = false;
     playerBlackJack = false;
-    $shuffleCards = false;
     $dealCard = false;
-    $startedGame = false;
   }
 
+  //Clears the hand and the truthy values in the game.
+  function clearHands(){
+    houseHand = [];
+    houseHandValue = 0;
+    playerHand = [];
+    playerHandValue = 0;
+    stand = false;
+    revealHand = false;
+    lost = false;
+    gameEndStatus = "";
+    won = false;
+    draw = false;
+    playerBlackJack = false;
+    betValue = 0;
+  }
+
+  //Picks a random card and removes it from the deck.
   function pickRandomCard() {
     let pickedCard;
     if (deck.length > 0) {
@@ -104,7 +117,8 @@
     return pickedCard;
   }
 
-  function valueOfHandAce11(handArray) {
+  //Checks the value of the hand if an ace is 11.
+  function valueOfHandHighAce(handArray) {
     let value = 0;
     handArray.forEach((card) => {
       let cardValue = card.replace(/[^0-9]+/, "");
@@ -113,12 +127,13 @@
     return value;
   }
 
+  //Checks the value of the hand.
   function handValue(handArray) {
     let value = 0;
     handArray.forEach((card) => {
       let cardValue = card.replace(/[^0-9]+/, "");
       if (cardValue == 11) {
-        if (valueOfHandAce11(handArray) > 21) {
+        if (valueOfHandHighAce(handArray) > 21) {
           cardValue = 1;
         }
       }
@@ -127,7 +142,9 @@
     return value;
   }
 
-  function initialDeal() {
+  //Deals cards to AI and user.
+  function dealCards() {
+    console.log('dealcardsfunc')
     for (let index = 0; index < 2; index++) {
       let rndcard = pickRandomCard();
       houseHand.push(rndcard);
@@ -135,31 +152,36 @@
     }
     houseHandValue = handValue(houseHand);
     playerHand.push(pickRandomCard());
+    playerHand.push(pickRandomCard());
     playerHand = playerHand;
     playerHandValue = handValue(playerHand);
   }
 
-  async function hitAction() {
+  //Handles a player hit.
+  async function triggerHitAction() {
     playerHand.push(pickRandomCard());
     playerHand = playerHand;
     playerHandValue = handValue(playerHand);
     if (playerHandValue > 21) {
+      revealHand = true;
       lost = true;
-      gameEndStatus = 'lost';
+      gameEndStatus = "lost";
       setScores();
     } else if (playerHandValue == 21) {
       playerBlackJack = true;
-      await startHouseActions();
+      triggerStandAction();
       setScores();
     }
   }
 
+  //Handles a player stand.
   async function triggerStandAction() {
     stand = true;
     await startHouseActions();
     setScores();
   }
 
+  //Starts the house actions.
   async function startHouseActions() {
     return new Promise((resolve) => {
       setTimeout(async () => {
@@ -170,12 +192,13 @@
     });
   }
 
+  //Handles values of the house hand.
   async function doHouseAI() {
     let shouldHaveMinimum17 = houseHandValue < 17;
     console.log("first", shouldHaveMinimum17);
     if (houseHandValue > playerHandValue && houseHandValue < 22) {
       lost = true;
-      gameEndStatus = 'lost';
+      gameEndStatus = "lost";
     } else if (shouldHaveMinimum17) {
       houseHand.push(pickRandomCard());
       houseHand = houseHand;
@@ -188,66 +211,43 @@
       });
     } else {
       checkResult();
-      console.log(
-        "lost",
-        lost,
-        "won",
-        won,
-        "draw",
-        draw,
-        "playerblackjack",
-        playerBlackJack
-      );
     }
   }
 
+  //Checks 
   function checkResult() {
     let sameHand = playerHandValue == houseHandValue; //Draw
     let is17 = houseHandValue == 17; //Compare hands and stop house counting
     let blackjack = houseHandValue == 21; //Compare hands and stop house counting
     let over21 = houseHandValue > 21; //House looses
-    function houseOverPlayer() {
-      if (houseHandValue > playerHandValue) {
-        lost = true;
-      gameEndStatus = 'lost';
-
-      } else {
-        won = true;
-      gameEndStatus = 'won';
-
-      }
-    }
-    function playerOverHouse() {
-      if (playerHandValue > houseHandValue) {
-        won = true;
-      gameEndStatus = 'won';
-
-      } else {
-        lost = true;
-      gameEndStatus = 'lost';
-
-      }
-    }
-
+    
     if (sameHand) {
       draw = true;
-      gameEndStatus = 'draw';
-
+      gameEndStatus = "draw";
     } else if (is17 || blackjack) {
-      houseOverPlayer();
-      playerOverHouse();
+      compareHands();
     } else if (over21) {
       won = true;
-      gameEndStatus = 'won';
-
+      gameEndStatus = "won";
+    }
+  }
+  
+  function compareHands() {
+    if (houseHandValue > playerHandValue) {
+      lost = true;
+      gameEndStatus = "lost";
+    } else {
+      won = true;
+      gameEndStatus = "won";
     }
   }
 
+  //Updates the scores and betvalue.
   function setScores() {
     if (lost) {
       $housePoints += betValue;
     } else if (won) {
-      $userPoints += betValue * 2;
+      $userPoints += (betValue * 2);
       $housePoints -= betValue;
     } else if (draw) {
       $userPoints += betValue;
@@ -262,6 +262,12 @@
       $userPoints -= amount;
     }
   }
+
+  function clearBet() {
+    $userPoints += betValue;
+    betValue = 0;
+  }
+
 
   dealCard.subscribe((value) => {
     if (value) {
@@ -284,7 +290,7 @@
     <button class="btnStartGame retroFormat blue" on:click={startGame}
       >Deal cards</button
     >
-    <button class="btnClearBet retroFormat red" on:click={() => {betValue = 0}}
+    <button class="btnClearBet retroFormat red" on:click={clearBet}
       >Clear bet</button
     >
   {/if}
@@ -292,13 +298,16 @@
   <!-- Show menu if you lost the hand -->
   {#if lost || won || draw}
     <div class="lostScreen">
-      <HandEndScreen gameStatus={gameEndStatus} on:startNewHand={resetGame}/>
+      <HandEndScreen
+        gameStatus={gameEndStatus}
+        on:startNewHand={clearHands}
+      />
     </div>
   {/if}
 
   <!-- Show house hands -->
   <div class="houseHandCards">
-    {#if houseHand.length > 0 && $dealCard && !stand}
+    {#if houseHand.length > 0 && $dealCard && !revealHand}
       <Card card={"rear"} direction={200} />
       <Card card={houseHand[1]} direction={200} />
     {:else if houseHand.length > 0 && $dealCard && revealHand}
@@ -329,7 +338,7 @@
   {#if $dealCard == true && $startedGame && !lost && !won && !draw}
     <div class="actionButtons">
       {#if !stand}
-        <button class="btnAction" on:click={hitAction}>Hit</button>
+        <button class="btnAction" on:click={triggerHitAction}>Hit</button>
       {/if}
       <button class="btnAction" on:click={triggerStandAction}>stand</button>
     </div>

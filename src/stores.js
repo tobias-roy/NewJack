@@ -6,7 +6,7 @@ export const startedGame = writable(false);
 
 export const name = writable("Guest");
 export const userPoints = writable(2000);
-export const housePoints = writable(10000);
+export const housePoints = writable(5000);
 
 if (typeof localStorage !== "undefined") {
   //Users name as a store and assigned to localstorage so you can "Jump right in"
