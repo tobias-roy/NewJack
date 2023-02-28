@@ -44,7 +44,7 @@
 
   //Creates a deck consisting of 108 cards.
   function createDeck() {
-    if(deck.length < 50){
+    if (deck.length < 50) {
       for (let index = 0; index < 2; index++) {
         cardType.forEach((type) => {
           cardValue.forEach((value) => {
@@ -89,7 +89,7 @@
   }
 
   //Clears the hand and the truthy values in the game.
-  function clearHands(){
+  function clearHands() {
     houseHand = [];
     houseHandValue = 0;
     playerHand = [];
@@ -144,7 +144,7 @@
 
   //Deals cards to AI and user.
   function dealCards() {
-    console.log('dealcardsfunc')
+    console.log("dealcardsfunc");
     for (let index = 0; index < 2; index++) {
       let rndcard = pickRandomCard();
       houseHand.push(rndcard);
@@ -155,10 +155,14 @@
     playerHand.push(pickRandomCard());
     playerHand = playerHand;
     playerHandValue = handValue(playerHand);
+    if (playerHandValue == 21) {
+      playerBlackJack = true;
+      triggerStandAction();
+    }
   }
 
   //Handles a player hit.
-  async function triggerHitAction() {
+  function triggerHitAction() {
     playerHand.push(pickRandomCard());
     playerHand = playerHand;
     playerHandValue = handValue(playerHand);
@@ -170,7 +174,6 @@
     } else if (playerHandValue == 21) {
       playerBlackJack = true;
       triggerStandAction();
-      setScores();
     }
   }
 
@@ -195,7 +198,6 @@
   //Handles values of the house hand.
   async function doHouseAI() {
     let shouldHaveMinimum17 = houseHandValue < 17;
-    console.log("first", shouldHaveMinimum17);
     if (houseHandValue > playerHandValue && houseHandValue < 22) {
       lost = true;
       gameEndStatus = "lost";
@@ -214,31 +216,31 @@
     }
   }
 
-  //Checks 
+  //Checks
   function checkResult() {
     let sameHand = playerHandValue == houseHandValue; //Draw
     let is17 = houseHandValue == 17; //Compare hands and stop house counting
     let blackjack = houseHandValue == 21; //Compare hands and stop house counting
     let over21 = houseHandValue > 21; //House looses
-    
+
     if (sameHand) {
       draw = true;
       gameEndStatus = "draw";
     } else if (is17 || blackjack) {
       compareHands();
-    } else if (over21) {
+    } else if (over21 || (playerBlackJack && houseHandValue < 21)) {
       won = true;
       gameEndStatus = "won";
     }
-  }
-  
-  function compareHands() {
-    if (houseHandValue > playerHandValue) {
-      lost = true;
-      gameEndStatus = "lost";
-    } else {
-      won = true;
-      gameEndStatus = "won";
+
+    function compareHands() {
+      if (houseHandValue > playerHandValue) {
+        lost = true;
+        gameEndStatus = "lost";
+      } else {
+        won = true;
+        gameEndStatus = "won";
+      }
     }
   }
 
@@ -247,7 +249,7 @@
     if (lost) {
       $housePoints += betValue;
     } else if (won) {
-      $userPoints += (betValue * 2);
+      $userPoints += betValue * 2;
       $housePoints -= betValue;
     } else if (draw) {
       $userPoints += betValue;
@@ -267,7 +269,6 @@
     $userPoints += betValue;
     betValue = 0;
   }
-
 
   dealCard.subscribe((value) => {
     if (value) {
@@ -298,10 +299,7 @@
   <!-- Show menu if you lost the hand -->
   {#if lost || won || draw}
     <div class="lostScreen">
-      <HandEndScreen
-        gameStatus={gameEndStatus}
-        on:startNewHand={clearHands}
-      />
+      <HandEndScreen gameStatus={gameEndStatus} on:startNewHand={clearHands} />
     </div>
   {/if}
 
