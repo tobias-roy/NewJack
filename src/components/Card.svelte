@@ -1,13 +1,14 @@
 <script>
-  import { fade } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   export let card;
-
+  export let direction;
 </script>
 
-<div in:fade={{duration: 400}} out:fade={{duration: 200}}>
-  {#if card != null && card != 'rear'}
+<!-- <div in:fade={{duration: 400}} out:fade={{duration: 200}}> -->
+<div in:fly={{ y: direction, duration: 400 }}>
+  {#if card != null && card != "rear"}
     <img class="size" src="src/lib/svg/cards/{card}.svg" alt="" />
-  {:else if card == 'rear'}
+  {:else if card == "rear"}
     <div class="size svgBackground" />
   {/if}
 </div>

@@ -18,7 +18,7 @@
     "Ace11",
   ];
   let deck = [];
-  
+
   function createDeck() {
     cardType.forEach((type) => {
       cardValue.forEach((value) => {
