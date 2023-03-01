@@ -22,8 +22,8 @@
 <style>  
   .won{
     position: absolute;
-    left: 0px;
-    top: -260px;
+    left: 5px;
+    top: -200px;
     width: 300px;
   }
   .nameInputContainer {

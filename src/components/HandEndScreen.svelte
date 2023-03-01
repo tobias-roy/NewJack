@@ -3,68 +3,73 @@
   import { name, startedGame } from "../stores";
 
   const dispatch = createEventDispatcher();
-  function startNewHand(){
+  function startNewHand() {
     $startedGame = false;
-    dispatch('startNewHand')
+    dispatch("startNewHand");
   }
-
 
   export let gameStatus;
 </script>
 
-<div class:draw="{gameStatus == 'draw'}" class:won="{gameStatus == 'won'}" class:lost="{gameStatus == 'lost'}">
+<div
+  class:draw={gameStatus == "draw"}
+  class:won={gameStatus == "won"}
+  class:lost={gameStatus == "lost"}
+>
   <div class="nameInputContainer">
-    {#if gameStatus == 'lost'}
-    <div class="lostScreen">
-      <h1>House wins!</h1>
-    </div>
-  {/if}
-
-  {#if gameStatus == 'won'}
-    <div class="lostScreen">
-      <h1 style="color: green;">{$name} wins!</h1>
-    </div>
-  {/if}
-
-  {#if gameStatus == 'draw'}
-    <div class="lostScreen">
-      <div class="pushResult">
-        <h1>Push!</h1>
+    {#if gameStatus == "lost"}
+      <div class="lostScreen">
+        <h1>House wins!</h1>
       </div>
-    </div>
-  {/if}
+    {/if}
+
+    {#if gameStatus == "won"}
+      <div class="lostScreen">
+        <h1 style="color: green;">{$name} wins!</h1>
+      </div>
+    {/if}
+
+    {#if gameStatus == "draw"}
+      <div class="lostScreen">
+        <div class="pushResult">
+          <h1>Push!</h1>
+        </div>
+      </div>
+    {/if}
     <button on:click={startNewHand}>Play again!</button>
   </div>
 </div>
 
 <style>
-  .draw{
+  .draw {
     position: absolute;
     left: 0px;
     top: -260px;
     width: 300px;
   }
 
-  .lost{
+  .lost {
     position: absolute;
     left: 0px;
     top: -260px;
     width: 300px;
   }
-  
-  .won{
+
+  .won {
     position: absolute;
-    left: 0px;
+    left: 20px;
     top: -260px;
     width: 300px;
   }
   .nameInputContainer {
+    position: absolute;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
     height: 200px;
-    margin-top: 20vh;
+    left: 45px;
+    top: 240px;
   }
 
   .nameInputContainer > button {
@@ -88,6 +93,4 @@
   .nameInputContainer > button:hover {
     background: #19eab2;
   }
-
-
 </style>

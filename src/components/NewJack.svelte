@@ -555,6 +555,7 @@
       height: 150px;
       left: 500px;
       bottom: 257px;
+      z-index: 1;
     }
 
     .btnStartGame {
