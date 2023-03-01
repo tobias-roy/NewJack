@@ -336,7 +336,7 @@
         <Card {card} direction="200" />
       {/each}
       <div class="houseHandValueContainer">
-        <h2>
+        <h2 class="houseHandValue">
           House hand: {houseHandValue}
         </h2>
       </div>
@@ -585,6 +585,10 @@
       color: white;
     }
 
+    .userInfo > p {
+      margin: 0%;
+    }
+
     .shuffleAnimation {
       position: absolute;
       left: calc(50% - 40px);
@@ -618,6 +622,214 @@
       top: 5%;
       color: white;
       font-size: 25px;
+    }
+  }
+  
+  @media only screen and (max-width: 1360px) {
+    .tableBackground {
+      background-image: url("../lib/images/table.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 900px;
+      height: 550px;
+      position: absolute;
+      left: calc(50% - 450px);
+    }
+
+    .retroFormat {
+      margin-top: 20px;
+      background: #7c7c7c;
+      border-bottom: 3px inset rgba(0, 0, 0, 0.5);
+      border-left: 3px inset rgba(0, 0, 0, 0.5);
+      border-right: 3px inset rgba(255, 255, 255, 0.5);
+      border-top: 3px inset rgba(255, 255, 255, 0.5);
+      box-sizing: border-box;
+      color: white;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 0.6rem;
+      min-width: 50px;
+      padding: 0.15rem;
+      text-transform: uppercase;
+      width: auto;
+    }
+    .retroFormat.hit{
+      background: rgb(23, 206, 23);
+    }
+    .retroFormat.hit:hover,
+    .retroFormat.hit:focus{
+      background: rgb(121, 197, 121);
+    }
+
+    .retroFormat.stand{
+      background: rgb(206, 115, 23);
+    }
+    .retroFormat.stand:hover,
+    .retroFormat.stand:focus{
+      background: rgb(203, 131, 60);
+    }
+    .retroFormat.blue {
+      background: #0000bc;
+    }
+    .retroFormat.blue:focus,
+    .retroFormat.blue:hover {
+      background: #0000fc;
+    }
+
+    .retroFormat.red {
+      background: #881400;
+    }
+    .retroFormat.red:focus,
+    .retroFormat.red:hover {
+      background: #a81000;
+    }
+
+    .pokerChip {
+      background-image: url(../lib/svg/pokerchip.svg);
+      background-repeat: no-repeat;
+      background-size: contain;
+      border-radius: 55px;
+      border: none;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
+      outline: inherit;
+      width: 50px;
+      height: 50px;
+      color: aliceblue;
+      font-size: 13px;
+    }
+
+    .chipContainer {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      bottom: 26%;
+      left: 36%;
+    }
+
+    .displayBetValue {
+      position: absolute;
+      left: 25%;
+      bottom: 50%;
+      color: rgb(255, 255, 255);
+      font-size: 80%;
+    }
+    .btnAction {
+      margin-left: 50px;
+    }
+
+    .houseHandValueContainer {
+      width: 150px;
+      position: absolute;
+      top: 75px;
+      left: 20px;
+      color: white;
+    }
+
+    .houseHandValue{
+      font-size: 12px;
+    }
+
+    .actionButtons {
+      display: flex;
+      position: absolute;
+      left: 325px;
+      bottom: 105px;
+    }
+    .houseHandCards {
+      display: flex;
+      position: absolute;
+      left: calc(50% - 62px);
+      bottom: 75%;
+    }
+
+    .playerHandCards {
+      display: flex;
+      position: absolute;
+      left: calc(50% - 62px);
+      bottom: 28%;
+    }
+
+    .playerHandValue{
+      font-size: 12px;
+    }
+    .playerHandValueContainer{
+      position: absolute;
+      width: 100px;
+      bottom: -25px;
+      left: 23px;
+      color: white;
+    }
+
+    .betMenuButtons{
+      position: absolute;
+      width: 155px;
+      height: 100px;
+      left: calc(50% - 80px);
+      bottom: 200px;
+      z-index: 1;
+    }
+
+    .btnStartGame {
+      z-index: 1;
+      position: absolute;
+      left: 0px;
+      top: 5px;
+    }
+    .btnClearBet {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+    }
+
+    .btnAllIn {
+      position: absolute;
+      left: calc(50% - 25px);
+      bottom: 15px;
+    }
+
+    .userInfo {
+      position: absolute;
+      bottom: 12%;
+      left: calc(50% - 57px);
+      font-size: 12px;
+      color: white;
+    }
+
+    .shuffleAnimation {
+      position: absolute;
+      left: calc(50% - 31px);
+      bottom: 53%;
+      z-index: 0;
+    }
+
+    .popUpComponent {
+      z-index: 1;
+      width: 150px;
+      height: 90px;
+      flex-direction: column;
+      background-color: rgba(199, 172, 232, 0.922);
+      position: absolute;
+      left: calc(50% - 75px);
+      bottom: 286px;
+      border-radius: 5px;
+    }
+
+    .cardsInDeck {
+      position: absolute;
+      right: 170px;
+      top: 28px;
+      color: white;
+      font-size: 12px;
+    }
+
+    .housePoints {
+      position: absolute;
+      left: 10%;
+      top: 5%;
+      color: white;
+      font-size: 12px;
     }
   }
 </style>

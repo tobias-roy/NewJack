@@ -1,12 +1,27 @@
 <script>
+  import { browser } from '$app/environment';
   import Nameinput from "../../components/Nameinput.svelte";
   import NewJackGame from "../../components/NewJack.svelte";
+  import UnsupportedResolution from '../../components/UnsupportedResolution.svelte';
   import { housePoints, name, shuffleCards, startedGame, userPoints } from "../../stores";
   let restart = {};
   let newJackComponent;
+  let unsupportedResolution = false;
+
+  if(browser){
+    addEventListener("resize", (event) => {
+      onresize = event => {
+        if(window.innerWidth < 900){
+          unsupportedResolution = true;
+        } else {
+          unsupportedResolution = false;
+        }
+      };
+    })
+  }
 
   function resetApp() {
-    $name = "Guest";
+    $name = null;
     $userPoints = 2000;
     $housePoints = 5000;
     $shuffleCards = false;
@@ -23,13 +38,16 @@
 
 <div>
   {#key restart}
-    {#if $name == "Guest"}
+    {#if $name == null && !unsupportedResolution}
       <Nameinput />
-    {:else}
+    {:else if !unsupportedResolution}
       <NewJackGame bind:this={newJackComponent} />
     {/if}
+    {#if unsupportedResolution}
+      <UnsupportedResolution />
+    {/if}
   {/key}
-  {#if $name != "Guest"}
+  {#if $name != null}
     <button class="resetButton retroButton" on:click={resetApp}
       >Reset game</button
     >
@@ -58,5 +76,22 @@
     padding: 0.3rem;
     text-transform: uppercase;
     width: auto;
+  }
+
+  @media only screen and (max-width: 1360px) {
+    .resetButton{
+      bottom: 50px;
+      left: calc(50% - 32px);
+    }
+
+    .retroButton {
+    border-bottom: 4px inset rgba(0, 0, 0, 0.5);
+    border-left: 4px inset rgba(0, 0, 0, 0.5);
+    border-right: 4px inset rgba(255, 255, 255, 0.5);
+    border-top: 4px inset rgba(255, 255, 255, 0.5);
+    font-size: 0.6rem;
+    min-width: 65px;
+    padding: 0.2rem;
+  }
   }
 </style>

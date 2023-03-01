@@ -10,22 +10,25 @@
   export let buttonText = '';
 </script>
 
-<div class="won">
-  <div class="nameInputContainer">
-    <div class="lostScreen">
-      <h1>{message}</h1>
-    </div>
-    <button on:click={dispatchEvent}>{buttonText}</button>
+<div class="nameInputContainer">
+  <div class="messageText">
+    <h1>{message}</h1>
   </div>
+  <button class="bottomBox" on:click={dispatchEvent}>{buttonText}</button>
 </div>
 
 <style>  
-  .won{
+  .messageText{
     position: absolute;
-    left: 5px;
-    top: -200px;
-    width: 300px;
+    left: 23px;
+    top: 0px;
   }
+
+  .bottomBox{
+    position: absolute;
+    bottom: 20px;
+  }
+
   .nameInputContainer {
     display: flex;
     justify-content: center;
@@ -57,5 +60,48 @@
     background: #19eab2;
   }
 
+  @media only screen and (min-width: 1360px) {
+      .nameInputContainer {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      height: 50px;
+      margin-top: 20vh;
+    }
+  }
+
+  @media only screen and (max-width: 1360px) {
+      .nameInputContainer > button {
+      background: #02b6de;
+      border-bottom: 3px inset rgba(0, 0, 0, 0.5);
+      border-left: 3px inset rgba(0, 0, 0, 0.5);
+      border-right: 3px inset rgba(255, 255, 255, 0.5);
+      border-top: 3px inset rgba(255, 255, 255, 0.5);
+      box-sizing: border-box;
+      color: white;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 0.6rem;
+      min-width: 50px;
+      padding: 0.2rem;
+      text-transform: uppercase;
+      width: auto;
+    }
+    .messageText{
+      position: absolute;
+      left: 18px;
+      top: 0px;
+    }
+  
+    .bottomBox{
+      position: absolute;
+      bottom: 20px;
+    }
+  
+    .messageText > h1 {
+      font-size: 18px;
+    }
+  }
 
 </style>
