@@ -1,8 +1,12 @@
 <script>
   import { name } from "../stores";
-  let inputName;
+  let inputName = '';
   function saveName() {
-    $name = inputName;
+    if(inputName.length <= 8){
+      $name = inputName;
+    } else {
+      !alert('Name has to be 8 or less characters!')
+    }
   }
 </script>
 

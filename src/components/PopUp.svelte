@@ -1,57 +1,25 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { name, startedGame } from "../stores";
 
   const dispatch = createEventDispatcher();
-  function startNewHand(){
-    $startedGame = false;
-    dispatch('startNewHand')
+  function dispatchEvent(){
+    dispatch('buttonClick')
   }
 
-
-  export let gameStatus;
+  export let message = '';
+  export let buttonText = '';
 </script>
 
-<div class:draw="{gameStatus == 'draw'}" class:won="{gameStatus == 'won'}" class:lost="{gameStatus == 'lost'}">
+<div class="won">
   <div class="nameInputContainer">
-    {#if gameStatus == 'lost'}
     <div class="lostScreen">
-      <h1>House wins!</h1>
+      <h1>{message}</h1>
     </div>
-  {/if}
-
-  {#if gameStatus == 'won'}
-    <div class="lostScreen">
-      <h1 style="color: green;">{$name} wins!</h1>
-    </div>
-  {/if}
-
-  {#if gameStatus == 'draw'}
-    <div class="lostScreen">
-      <div class="pushResult">
-        <h1>Push!</h1>
-      </div>
-    </div>
-  {/if}
-    <button on:click={startNewHand}>Play again!</button>
+    <button on:click={dispatchEvent}>{buttonText}</button>
   </div>
 </div>
 
-<style>
-  .draw{
-    position: absolute;
-    left: 0px;
-    top: -260px;
-    width: 300px;
-  }
-
-  .lost{
-    position: absolute;
-    left: 0px;
-    top: -260px;
-    width: 300px;
-  }
-  
+<style>  
   .won{
     position: absolute;
     left: 0px;
