@@ -1,38 +1,31 @@
-# create-svelte
-
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+# NewJack
+NewJack is a school project with focus on building a blackjack application using JavaScript. <br>
+Reference: [MDN JavaScript Documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+## Dependencies
+#### Node
+Make sure you have [Node.js](https://nodejs.org/en/) installed. <br>
+Navigate to the project folder and run the following command to install dependencies:
+```
+npm install
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
+## Usage
+#### Development
+To run the website in development mode use the following command in the project folder:
+```
 npm run dev
+```
+This will host a local development version of the application on [http://localhost:5173/](http://localhost:5173/)
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+#### Production
+```
+Don't
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Future development
+#### Scaling
+- Current version does not support scaling, this will be made based on @media
+#### Multiplayer
+- Local multiplayer will be added in the future
+#### AI Multiplayer
+- Option to add AI of various difficulty will be added in the future
