@@ -1,11 +1,13 @@
 <script>
-  import { name } from "../stores";
-  let inputName = '';
+  import { housePoints, name, userPoints } from "../stores";
+  let inputName = "";
   function saveName() {
-    if(inputName.length <= 8){
+    if (inputName.length <= 8) {
       $name = inputName;
+      $housePoints = 20000;
+      $userPoints = 2000;
     } else {
-      !alert('Name has to be 8 or less characters!')
+      !alert("Name has to be 8 or less characters!");
     }
   }
 </script>
@@ -53,5 +55,17 @@
   .nameInputContainer > button:focus,
   .nameInputContainer > button:hover {
     background: #bcbcbc;
+  }
+
+  @media only screen and (max-width: 1360px) {
+    .nameInputContainer > button {
+      border-bottom: 5px inset rgba(0, 0, 0, 0.5);
+      border-left: 5px inset rgba(0, 0, 0, 0.5);
+      border-right: 5px inset rgba(255, 255, 255, 0.5);
+      border-top: 5px inset rgba(255, 255, 255, 0.5);
+      font-size: 1rem;
+      min-width: 80px;
+      padding: 0.3rem;
+    }
   }
 </style>

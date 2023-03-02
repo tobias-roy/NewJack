@@ -8,6 +8,8 @@
   } from "../stores";
   import Card from "./Card.svelte";
   import HandEndScreen from "./HandEndScreen.svelte";
+  import HouseOutOfFunds from "./HouseOutOfFunds.svelte";
+  import OutOfFunds from "./OutOfFunds.svelte";
   import PopUp from "./PopUp.svelte";
   import Shuffle from "./Shuffle.svelte";
 
@@ -64,7 +66,7 @@
     createdDeck = true;
   }
 
-  function allIn(){
+  function allIn() {
     allInCheck = false;
     betValue = $userPoints;
     $userPoints -= $userPoints;
@@ -221,7 +223,7 @@
         }, 200);
       });
     } else {
-      console.log('doHouseAI - before checkResult')
+      console.log("doHouseAI - before checkResult");
       checkResult();
     }
   }
@@ -298,25 +300,36 @@
     <h3>House balance: {$housePoints}</h3>
   </div>
 
+  {#if $housePoints <= 0 && betValue == 0}
+    <HouseOutOfFunds />
+  {/if}
+
   <!-- Bet menu -->
-  {#if !$startedGame}
-  <div class="betMenuButtons">
-    <button class="btnStartGame retroFormat blue" on:click={startGame}
-      >Deal cards</button
-    >
-    <button class="btnClearBet retroFormat red" on:click={clearBet}
-      >Clear bet</button
-    >
-    <button class="btnAllIn retroFormat hit" on:click={() => {allInCheck = true}}
-      >All in!</button
-    >
-  </div>
+  {#if !$startedGame && $housePoints > 0}
+    <div class="betMenuButtons">
+      <button class="btnStartGame retroFormat blue" on:click={startGame}
+        >Deal cards</button
+      >
+      <button class="btnClearBet retroFormat red" on:click={clearBet}
+        >Clear bet</button
+      >
+      <button
+        class="btnAllIn retroFormat hit"
+        on:click={() => {
+          allInCheck = true;
+        }}>All in!</button
+      >
+    </div>
   {/if}
 
   {#if allInCheck}
-      <div class="popUpComponent">
-        <PopUp message="Are you sure?" buttonText='ALL IN!' on:buttonClick={allIn}/>
-      </div>
+    <div class="popUpComponent">
+      <PopUp
+        message="Are you sure?"
+        buttonText="ALL IN!"
+        on:buttonClick={allIn}
+      />
+    </div>
   {/if}
 
   <!-- Show menu if you lost the hand -->
@@ -336,7 +349,7 @@
         <Card {card} direction="200" />
       {/each}
       <div class="houseHandValueContainer">
-        <h2>
+        <h2 class="houseHandValue">
           House hand: {houseHandValue}
         </h2>
       </div>
@@ -344,7 +357,7 @@
   </div>
 
   <!-- Show shuffle animation and rear of deck -->
-  {#if createdDeck === true}
+  {#if createdDeck === true && $housePoints > 0}
     <div class="shuffleAnimation">
       <Shuffle />
     </div>
@@ -366,9 +379,13 @@
   {#if $dealCard == true && $startedGame && !lost && !won && !draw}
     <div class="actionButtons">
       {#if !stand}
-        <button class="btnAction hit retroFormat" on:click={triggerHitAction}>Hit</button>
+        <button class="btnAction hit retroFormat" on:click={triggerHitAction}
+          >Hit</button
+        >
       {/if}
-      <button class="btnAction stand retroFormat" on:click={triggerStandAction}>stand</button>
+      <button class="btnAction stand retroFormat" on:click={triggerStandAction}
+        >stand</button
+      >
     </div>
   {/if}
 
@@ -376,7 +393,7 @@
     <div class="displayBetValue">Bet value: {betValue}</div>
   {/if}
 
-  {#if !$startedGame}
+  {#if !$startedGame && $housePoints > 0}
     <div class="chipContainer">
       <button
         class="pokerChip"
@@ -415,6 +432,10 @@
   <div class="userInfo">
     <p>Your Balance: {$userPoints}</p>
   </div>
+
+  {#if $userPoints <= 0 && betValue == 0}
+    <OutOfFunds />
+  {/if}
 </div>
 
 <style>
@@ -453,23 +474,22 @@
       width: auto;
     }
 
-    .retroFormat.hit{
+    .retroFormat.hit {
       background: rgb(23, 206, 23);
     }
 
     .retroFormat.hit:hover,
-    .retroFormat.hit:focus{
+    .retroFormat.hit:focus {
       background: rgb(121, 197, 121);
     }
-    .retroFormat.stand{
+    .retroFormat.stand {
       background: rgb(206, 115, 23);
     }
 
     .retroFormat.stand:hover,
-    .retroFormat.stand:focus{
+    .retroFormat.stand:focus {
       background: rgb(203, 131, 60);
     }
-
 
     .pokerChip {
       background-image: url(../lib/svg/pokerchip.svg);
@@ -532,13 +552,12 @@
       bottom: 25%;
     }
 
-    .playerHandValueContainer{
+    .playerHandValueContainer {
       position: absolute;
       width: 150px;
       bottom: -50px;
       left: 25px;
       color: white;
-
     }
     .tableBackground {
       background-image: url("../lib/images/table.png");
@@ -549,12 +568,13 @@
       position: relative;
     }
 
-    .betMenuButtons{
+    .betMenuButtons {
       position: absolute;
       width: 330px;
       height: 150px;
       left: 500px;
       bottom: 257px;
+      z-index: 1;
     }
 
     .btnStartGame {
@@ -575,13 +595,16 @@
       bottom: 15px;
     }
 
-
     .userInfo {
       position: absolute;
       bottom: 30px;
       left: 550px;
       font-size: 25px;
       color: white;
+    }
+
+    .userInfo > p {
+      margin: 0%;
     }
 
     .shuffleAnimation {
@@ -617,6 +640,214 @@
       top: 5%;
       color: white;
       font-size: 25px;
+    }
+  }
+
+  @media only screen and (max-width: 1360px) {
+    .tableBackground {
+      background-image: url("../lib/images/table.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      width: 900px;
+      height: 550px;
+      position: absolute;
+      left: calc(50% - 450px);
+    }
+
+    .retroFormat {
+      margin-top: 20px;
+      background: #7c7c7c;
+      border-bottom: 3px inset rgba(0, 0, 0, 0.5);
+      border-left: 3px inset rgba(0, 0, 0, 0.5);
+      border-right: 3px inset rgba(255, 255, 255, 0.5);
+      border-top: 3px inset rgba(255, 255, 255, 0.5);
+      box-sizing: border-box;
+      color: white;
+      cursor: pointer;
+      display: inline-block;
+      font-size: 0.6rem;
+      min-width: 50px;
+      padding: 0.15rem;
+      text-transform: uppercase;
+      width: auto;
+    }
+    .retroFormat.hit {
+      background: rgb(23, 206, 23);
+    }
+    .retroFormat.hit:hover,
+    .retroFormat.hit:focus {
+      background: rgb(121, 197, 121);
+    }
+
+    .retroFormat.stand {
+      background: rgb(206, 115, 23);
+    }
+    .retroFormat.stand:hover,
+    .retroFormat.stand:focus {
+      background: rgb(203, 131, 60);
+    }
+    .retroFormat.blue {
+      background: #0000bc;
+    }
+    .retroFormat.blue:focus,
+    .retroFormat.blue:hover {
+      background: #0000fc;
+    }
+
+    .retroFormat.red {
+      background: #881400;
+    }
+    .retroFormat.red:focus,
+    .retroFormat.red:hover {
+      background: #a81000;
+    }
+
+    .pokerChip {
+      background-image: url(../lib/svg/pokerchip.svg);
+      background-repeat: no-repeat;
+      background-size: contain;
+      border-radius: 55px;
+      border: none;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
+      outline: inherit;
+      width: 50px;
+      height: 50px;
+      color: aliceblue;
+      font-size: 13px;
+    }
+
+    .chipContainer {
+      display: flex;
+      flex-direction: row;
+      position: absolute;
+      bottom: 26%;
+      left: 36%;
+    }
+
+    .displayBetValue {
+      position: absolute;
+      left: 25%;
+      bottom: 50%;
+      color: rgb(255, 255, 255);
+      font-size: 80%;
+    }
+    .btnAction {
+      margin-left: 50px;
+    }
+
+    .houseHandValueContainer {
+      width: 150px;
+      position: absolute;
+      top: 75px;
+      left: 20px;
+      color: white;
+    }
+
+    .houseHandValue {
+      font-size: 12px;
+    }
+
+    .actionButtons {
+      display: flex;
+      position: absolute;
+      left: 325px;
+      bottom: 105px;
+    }
+    .houseHandCards {
+      display: flex;
+      position: absolute;
+      left: calc(50% - 62px);
+      bottom: 75%;
+    }
+
+    .playerHandCards {
+      display: flex;
+      position: absolute;
+      left: calc(50% - 62px);
+      bottom: 28%;
+    }
+
+    .playerHandValue {
+      font-size: 12px;
+    }
+    .playerHandValueContainer {
+      position: absolute;
+      width: 100px;
+      bottom: -25px;
+      left: 23px;
+      color: white;
+    }
+
+    .betMenuButtons {
+      position: absolute;
+      width: 155px;
+      height: 100px;
+      left: calc(50% - 80px);
+      bottom: 200px;
+      z-index: 1;
+    }
+
+    .btnStartGame {
+      z-index: 1;
+      position: absolute;
+      left: 0px;
+      top: 5px;
+    }
+    .btnClearBet {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+    }
+
+    .btnAllIn {
+      position: absolute;
+      left: calc(50% - 25px);
+      bottom: 15px;
+    }
+
+    .userInfo {
+      position: absolute;
+      bottom: 12%;
+      left: calc(50% - 57px);
+      font-size: 12px;
+      color: white;
+    }
+
+    .shuffleAnimation {
+      position: absolute;
+      left: calc(50% - 31px);
+      bottom: 53%;
+      z-index: 0;
+    }
+
+    .popUpComponent {
+      z-index: 1;
+      width: 150px;
+      height: 90px;
+      flex-direction: column;
+      background-color: rgba(199, 172, 232, 0.922);
+      position: absolute;
+      left: calc(50% - 75px);
+      bottom: 286px;
+      border-radius: 5px;
+    }
+
+    .cardsInDeck {
+      position: absolute;
+      right: 170px;
+      top: 28px;
+      color: white;
+      font-size: 12px;
+    }
+
+    .housePoints {
+      position: absolute;
+      left: 10%;
+      top: 5%;
+      color: white;
+      font-size: 12px;
     }
   }
 </style>

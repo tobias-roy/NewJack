@@ -25,4 +25,11 @@
     background-repeat: no-repeat;
     border-radius: 5px;
   }
+
+  @media only screen and (max-width: 1360px) {
+    .size{
+      width: 62px;
+      height: 80px;
+    }
+  }
 </style>
