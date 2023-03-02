@@ -7,3 +7,5 @@ export const startedGame = writable(false);
 export const name = writable();
 export const userPoints = writable();
 export const housePoints = writable();
+
+export const somesthi = writable(0);

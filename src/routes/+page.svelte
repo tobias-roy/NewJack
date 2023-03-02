@@ -1,5 +1,4 @@
 <script>
-	import Gamestart from '../components/Gamestart.svelte';
 </script>
 
 <svelte:head>
@@ -8,7 +7,7 @@
 </svelte:head>
 
 <section>
-	<div>
+	<div>	
 		<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 		<lottie-player src="https://assets2.lottiefiles.com/packages/lf20_ikQpwc9K3C.json"  background="transparent"  speed="1"  style="width: 500px; height: 500px;"  loop autoplay></lottie-player>
 	</div>
