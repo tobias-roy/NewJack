@@ -8,6 +8,7 @@
   } from "../stores";
   import Card from "./Card.svelte";
   import HandEndScreen from "./HandEndScreen.svelte";
+  import HouseOutOfFunds from "./HouseOutOfFunds.svelte";
   import OutOfFunds from "./OutOfFunds.svelte";
   import PopUp from "./PopUp.svelte";
   import Shuffle from "./Shuffle.svelte";
@@ -299,8 +300,12 @@
     <h3>House balance: {$housePoints}</h3>
   </div>
 
+  {#if $housePoints <= 0 && betValue == 0}
+      <HouseOutOfFunds />
+  {/if}
+
   <!-- Bet menu -->
-  {#if !$startedGame}
+  {#if !$startedGame && $housePoints > 0}
   <div class="betMenuButtons">
     <button class="btnStartGame retroFormat blue" on:click={startGame}
       >Deal cards</button
@@ -345,7 +350,7 @@
   </div>
 
   <!-- Show shuffle animation and rear of deck -->
-  {#if createdDeck === true}
+  {#if createdDeck === true && $housePoints > 0}
     <div class="shuffleAnimation">
       <Shuffle />
     </div>
@@ -370,6 +375,7 @@
         <button class="btnAction hit retroFormat" on:click={triggerHitAction}>Hit</button>
       {/if}
       <button class="btnAction stand retroFormat" on:click={triggerStandAction}>stand</button>
+      
     </div>
   {/if}
 
@@ -377,7 +383,7 @@
     <div class="displayBetValue">Bet value: {betValue}</div>
   {/if}
 
-  {#if !$startedGame}
+  {#if !$startedGame && $housePoints > 0}
     <div class="chipContainer">
       <button
         class="pokerChip"
@@ -420,6 +426,7 @@
   {#if $userPoints <= 0 && betValue == 0}
     <OutOfFunds />
   {/if}
+
 </div>
 
 <style>
