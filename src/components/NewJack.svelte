@@ -8,6 +8,7 @@
   } from "../stores";
   import Card from "./Card.svelte";
   import HandEndScreen from "./HandEndScreen.svelte";
+  import OutOfFunds from "./OutOfFunds.svelte";
   import PopUp from "./PopUp.svelte";
   import Shuffle from "./Shuffle.svelte";
 
@@ -415,6 +416,10 @@
   <div class="userInfo">
     <p>Your Balance: {$userPoints}</p>
   </div>
+
+  {#if $userPoints <= 0 && betValue == 0}
+    <OutOfFunds />
+  {/if}
 </div>
 
 <style>

@@ -43,7 +43,7 @@
 <style>
   .draw {
     position: absolute;
-    left: 38px;
+    left: 0px;
     top: -260px;
     width: 300px;
   }
