@@ -43,6 +43,7 @@
     {:else if !unsupportedResolution}
       <NewJackGame bind:this={newJackComponent} />
     {/if}
+    <!-- If the resolution goes below 700px in width -->
     {#if unsupportedResolution}
       <UnsupportedResolution />
     {/if}
