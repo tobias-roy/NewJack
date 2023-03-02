@@ -103,3 +103,5 @@ Don't
 - Local multiplayer will be added in the future
 #### AI Multiplayer
 - Option to add AI of various difficulty will be added in the future
+#### Prettier statistics page
+- A prettier statistics page is in the plans
