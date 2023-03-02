@@ -1,6 +1,4 @@
 <script>
-	import blackjack from '$lib/images/blackjackfront.png';
-	import { fade } from 'svelte/transition';
 	import Gamestart from '../components/Gamestart.svelte';
 </script>
 
@@ -10,10 +8,11 @@
 </svelte:head>
 
 <section>
-	<div in:fade class="front-image">
-		<img src={blackjack} alt="Welcome"/>
+	<div>
+		<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+		<lottie-player src="https://assets2.lottiefiles.com/packages/lf20_ikQpwc9K3C.json"  background="transparent"  speed="1"  style="width: 500px; height: 500px;"  loop autoplay></lottie-player>
 	</div>
-	<Gamestart />
+	<a class="retroButton" href="/newjack">Press to start gambling</a>
 </section>
 
 <style>
@@ -25,9 +24,22 @@
 		flex: 0.6;
 	}
 
-	.front-image img{
-		height: 400px;
-		width: 400px;
-	}
-
+	.retroButton {
+    margin-top: 10px;
+    background: #7c7c7c;
+    border-bottom: 6px inset rgba(0, 0, 0, 0.5);
+    border-left: 6px inset rgba(0, 0, 0, 0.5);
+    border-right: 6px inset rgba(255, 255, 255, 0.5);
+    border-top: 6px inset rgba(255, 255, 255, 0.5);
+		border-radius: 0.5rem;
+    box-sizing: border-box;
+    color: white;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.8rem;
+    min-width: 100px;
+    padding: 0.3rem;
+    text-transform: uppercase;
+    width: auto;
+  }
 </style>
