@@ -15,7 +15,7 @@
 
 	<footer>
 		<div class="vertical-align">
-			<a href="https://ludomani.dk/">Få hjælp til at stoppe</a>
+			<a href="https://ludomani.dk/" target="_blank" rel="noreferrer">Få hjælp til at stoppe</a>
 		</div>
 	</footer>
 </div>
