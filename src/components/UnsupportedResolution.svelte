@@ -4,7 +4,7 @@
   }
 </script>
 
-<div>
+<div style="text-align: center">
   <div class="errorImage">
     <script
       src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"
@@ -18,9 +18,7 @@
       autoplay
     />
   </div>
-  <button class="errorButton" on:click={resizePrompt}
-    >Press to solve error</button
-  >
+  <p>Please resize your browser to a supported resolution.</p>
 </div>
 
 <style>

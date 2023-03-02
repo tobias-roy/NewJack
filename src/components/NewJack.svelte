@@ -1,4 +1,6 @@
 <script>
+  import { updateDraw, updateHouseWon, updateWon } from "../apiCalls";
+
   import {
     dealCard,
     housePoints,
@@ -262,11 +264,14 @@
   function setScores() {
     if (lost) {
       $housePoints += betValue;
+      updateHouseWon();
     } else if (won) {
       $userPoints += betValue * 2;
       $housePoints -= betValue;
+      updateWon();
     } else if (draw) {
       $userPoints += betValue;
+      updateDraw();
     }
   }
 
