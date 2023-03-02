@@ -1,23 +1,29 @@
 <script>
-  import { browser } from '$app/environment';
+  import { browser } from "$app/environment";
   import Nameinput from "../../components/Nameinput.svelte";
   import NewJackGame from "../../components/NewJack.svelte";
-  import UnsupportedResolution from '../../components/UnsupportedResolution.svelte';
-  import { housePoints, name, shuffleCards, startedGame, userPoints } from "../../stores";
+  import UnsupportedResolution from "../../components/UnsupportedResolution.svelte";
+  import {
+    housePoints,
+    name,
+    shuffleCards,
+    startedGame,
+    userPoints
+  } from "../../stores";
   let restart = {};
   let newJackComponent;
   let unsupportedResolution = false;
 
-  if(browser){
+  if (browser) {
     addEventListener("resize", (event) => {
-      onresize = event => {
-        if(window.innerWidth < 900){
+      onresize = (event) => {
+        if (window.innerWidth < 900) {
           unsupportedResolution = true;
         } else {
           unsupportedResolution = false;
         }
       };
-    })
+    });
   }
 
   function resetApp() {
@@ -80,19 +86,19 @@
   }
 
   @media only screen and (max-width: 1360px) {
-    .resetButton{
+    .resetButton {
       bottom: 50px;
       left: calc(50% - 32px);
     }
 
     .retroButton {
-    border-bottom: 4px inset rgba(0, 0, 0, 0.5);
-    border-left: 4px inset rgba(0, 0, 0, 0.5);
-    border-right: 4px inset rgba(255, 255, 255, 0.5);
-    border-top: 4px inset rgba(255, 255, 255, 0.5);
-    font-size: 0.6rem;
-    min-width: 65px;
-    padding: 0.2rem;
-  }
+      border-bottom: 4px inset rgba(0, 0, 0, 0.5);
+      border-left: 4px inset rgba(0, 0, 0, 0.5);
+      border-right: 4px inset rgba(255, 255, 255, 0.5);
+      border-top: 4px inset rgba(255, 255, 255, 0.5);
+      font-size: 0.6rem;
+      min-width: 65px;
+      padding: 0.2rem;
+    }
   }
 </style>

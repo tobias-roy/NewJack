@@ -1,10 +1,10 @@
 import axios from "axios";
 
-export function getGameData() {
+export async function getGameData() {
   axios
     .get("http://localhost:3000/gamedata")
     .then(function (response) {
-      console.log(response.data);
+      return response.data;
     })
     .catch(function (error) {
       console.log(error);

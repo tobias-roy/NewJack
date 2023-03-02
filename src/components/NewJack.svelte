@@ -240,13 +240,11 @@
     if (sameHand) {
       draw = true;
       gameEndStatus = "draw";
-      updateDraw();
     } else if (is17 || blackjack) {
       compareHands();
     } else if (over21 || (playerBlackJack && houseHandValue < 21)) {
       won = true;
       gameEndStatus = "won";
-      updateWon();
     } else {
       compareHands();
     }
@@ -255,11 +253,9 @@
       if (houseHandValue > playerHandValue) {
         lost = true;
         gameEndStatus = "lost";
-        updateHouseWon();
       } else {
         won = true;
         gameEndStatus = "won";
-        updateWon();
       }
     }
   }
@@ -268,11 +264,14 @@
   function setScores() {
     if (lost) {
       $housePoints += betValue;
+      updateHouseWon();
     } else if (won) {
       $userPoints += betValue * 2;
       $housePoints -= betValue;
+      updateWon();
     } else if (draw) {
       $userPoints += betValue;
+      updateDraw();
     }
   }
 
