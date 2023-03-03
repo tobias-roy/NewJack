@@ -20,7 +20,9 @@ npm i
 npm i express
 npm i cors
 npm i body-parser
+npm i axios
 ```
+For documentation on dependencies follow the links: [Axios](https://axios-http.com/docs/intro) [Cors](https://github.com/expressjs/cors#readme) [Body-Parser](https://github.com/expressjs/body-parser#readme) [Express](https://expressjs.com/) <br>
 Create a new file and name it "server.js". <br>
 Using macOS cli
 ```
